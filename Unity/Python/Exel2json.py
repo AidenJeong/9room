@@ -165,6 +165,7 @@ def main() :
 		js = json.dumps(excelData.getDataWithDict(), sort_keys = True, indent = 4, ensure_ascii=False)
 		outfile = codecs.open(excelData.jsonFileName, 'w', 'utf-8')
 		outfile.write(js)
+		outfile.close()
 		print js
 
 if __name__ == "__main__" :

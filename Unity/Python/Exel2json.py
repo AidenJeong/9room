@@ -3,6 +3,7 @@ import json
 import codecs
 import os
 
+# 읽어들일 엑셀 파일 리스트
 fileList = ['ssWeaponAndProjectile.xlsx']
 
 class SheetData :
@@ -130,7 +131,6 @@ for fileNum in range(len(fileList)) :
 		for removeVal in removeList :
 			rowVal.remove(removeVal)
 
-		colCnt = len(rowVal)
 		rowCnt = workSheet.nrows
 		
 		sheetData = SheetData(sheetName)

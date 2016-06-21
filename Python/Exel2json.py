@@ -15,7 +15,7 @@ class SheetData :
 		self.dataNames = []
 		
 		# 실제 데이터들
-		self.data = []
+		self.data = {}
 		
 		self.columnCount = 0
 		self.dataCount = 0
@@ -67,7 +67,9 @@ class SheetData :
 			print "SheetData::appendListData() => wrong data."
 			print "Sheet name : ", self.sheetName
 			return
-		self.data.append(dic)
+			
+		# 엑셀 시트의 첫번째 열에 해당하는 데이터를 키값으로 갖는 딕셔너리 생성
+		self.data[dic[self.dataNames[0]]] = dic
 		
 
 		

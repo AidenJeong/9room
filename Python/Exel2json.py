@@ -4,7 +4,7 @@ import codecs
 import os
 
 # 읽어들일 엑셀 파일 리스트
-fileList = ['ssWeaponAndProjectile.xlsx']
+fileList = ['ssWeaponAndProjectile.xlsx', 'ssCharacter.xlsx', 'ssDataStage.xlsx', 'ssEnemy.xlsx']
 
 class SheetData :
 	def __init__(self, sheetName):
@@ -46,10 +46,13 @@ class SheetData :
 		
 	def addDataWithList(self, lst) :
 		if type(lst) is list : 
+			if lst[0] == '' :
+				print "It's not data row."
+				return
 			lstLength = len(lst)
 			if lstLength > self.columnCount :
 				for idx in range(self.columnCount, lstLength) :
-					lst.remove(lst[idx])
+					lst.remove(lst[self.columnCount])
 			self.appendListData(lst)
 			self.dataCount += 1
 		else : 
@@ -130,12 +133,7 @@ def main() :
 			if len(rowVal) == 0 :
 				print "nodata"
 				continue
-			
-			# Json 데이터 키가 중복되지 않도록 확인
-			if uniqueArray(rowVal) == False :
-				print "Data column name error."
-				break
-				
+	
 			# 데이터 셀 중간에 비어있는 셀이 있으면
 			# 그 셀부터 뒷쪽셀은 데이터로 간주하지 않고 스킵한다.
 			# 데이터에 대한 설명등을 엑셀에 포함하는 경우 빈 셀을 만들어 경계를 설정할 수 있도록 함.
@@ -150,6 +148,11 @@ def main() :
 					removeList.append(rval)
 			for removeVal in removeList :
 				rowVal.remove(removeVal)
+				
+			# Json 데이터 키가 중복되지 않도록 확인
+			if uniqueArray(rowVal) == False :
+				print "Data column name error."
+				break
 
 			rowCnt = workSheet.nrows
 			
@@ -168,7 +171,7 @@ def main() :
 		outfile = codecs.open(excelData.jsonFileName, 'w', 'utf-8')
 		outfile.write(js)
 		outfile.close()
-		print js
+		#print js
 
 if __name__ == "__main__" :
 	main()

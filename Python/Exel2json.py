@@ -4,7 +4,8 @@ import codecs
 import os
 
 # 읽어들일 엑셀 파일 리스트
-fileList = ['ssWeaponAndProjectile.xlsx', 'ssCharacter.xlsx', 'ssDataStage.xlsx', 'ssEnemy.xlsx']
+# 'ssWeaponAndProjectile.xlsx', 'ssCharacter.xlsx', 'ssEnemy.xlsx', 
+fileList = ['ssDataStage.xlsx']
 
 class SheetData :
 	def __init__(self, sheetName):
@@ -51,8 +52,10 @@ class SheetData :
 				return
 			lstLength = len(lst)
 			if lstLength > self.columnCount :
-				for idx in range(self.columnCount, lstLength) :
-					lst.remove(lst[self.columnCount])
+				tmp = []
+				for idx in range(0, self.columnCount) :
+					tmp.append(lst[idx])
+				lst = tmp
 			self.appendListData(lst)
 			self.dataCount += 1
 		else : 

@@ -2,10 +2,20 @@
 import json
 import codecs
 import os
+import sys
 
 # 읽어들일 엑셀 파일 리스트
 # 'ssWeaponAndProjectile.xlsx', 'ssCharacter.xlsx', 'ssEnemy.xlsx', 
 fileList = ['ssDataStage.xlsx']
+
+def ajPrint(*values) :
+    str = ''
+    for v in values :
+        str = str + v
+    if sys.version_info >= (3, 0, 0) :
+        print(str)
+    else
+        print str
 
 class SheetData :
 	def __init__(self, sheetName):
@@ -32,7 +42,7 @@ class SheetData :
 			self.columnCount = len(lst)
 			self.dataNames.extend(lst)
 		else :
-			print "SheetData::addDataNamesWithList() => wrong parameter."
+			ajPrint("SheetData::addDataNamesWithList() => wrong parameter.")
 		
 	def addData(self, *values) :
 		tempData = []
@@ -48,7 +58,7 @@ class SheetData :
 	def addDataWithList(self, lst) :
 		if type(lst) is list : 
 			if lst[0] == '' :
-				print "It's not data row."
+				ajPrint("It's not data row.")
 				return
 			lstLength = len(lst)
 			if lstLength > self.columnCount :
@@ -59,7 +69,7 @@ class SheetData :
 			self.appendListData(lst)
 			self.dataCount += 1
 		else : 
-			print "SheetData::addDataWithList() => wrong parameter."
+			ajPrint("SheetData::addDataWithList() => wrong parameter.")
 			
 	def appendListData(self, lst) :
 		# Json 데이터로 파싱하기 편리하도록
@@ -70,8 +80,8 @@ class SheetData :
 			for idx in range(self.columnCount) :
 				dic[self.dataNames[idx]] = lst[idx]
 		except :
-			print "SheetData::appendListData() => wrong data."
-			print "Sheet name : ", self.sheetName
+			ajPrint("SheetData::appendListData() => wrong data.")
+			ajPrint("Sheet name : ", self.sheetName)
 			return
 			
 		# 엑셀 시트의 첫번째 열에 해당하는 데이터를 키값으로 갖는 딕셔너리 생성
@@ -90,7 +100,7 @@ class ExcelData :
 			self.data.append(data)
 			self.count += 1
 		else :
-			print "JsonData::addSheetData() => wrong parameter."
+			ajPrint("JsonData::addSheetData() => wrong parameter.")
 			
 	def getDataWithDict(self) : 
 		dic = {}
@@ -107,7 +117,7 @@ def uniqueArray(data) :
 	cnt = 0
 	for s in data : 
 		if s in tempList :
-			print "duplicated : ", s, "(", xlrd.cellname(0,cnt), ")"
+			ajPrint("duplicated : ", s, "(", xlrd.cellname(0,cnt), ")")
 			return False
 		else :
 			tempList.append(s)
@@ -123,18 +133,18 @@ def main() :
 		excelData = ExcelData(jsonFilename)
 
 		for sheetName in sheetNameList :
-			print "Read sheet : ", sheetName
+			ajPrint("Read sheet : ", sheetName)
 			workSheet = workbook.sheet_by_name(sheetName)
 			try :
 				# 시트의 내용이 전혀 없으면 예외발생
 				rowVal = workSheet.row_values(0)
 			except :
-				print "Can't read a sheet : ", sheetName
+				ajPrint("Can't read a sheet : ", sheetName)
 				continue
 				
 			# 엑셀 시트의 A1 셀이 비어있으면 데이터 시트로 간주하지 않는다.
 			if len(rowVal) == 0 :
-				print "nodata"
+				ajPrint("nodata")
 				continue
 	
 			# 데이터 셀 중간에 비어있는 셀이 있으면
@@ -154,7 +164,7 @@ def main() :
 				
 			# Json 데이터 키가 중복되지 않도록 확인
 			if uniqueArray(rowVal) == False :
-				print "Data column name error."
+				ajPrint("Data column name error.")
 				break
 
 			rowCnt = workSheet.nrows
@@ -168,13 +178,13 @@ def main() :
 					sheetData.addDataWithList(singleData)
 				
 			excelData.addSheetData(sheetData)
-			print "Done."
+			ajPrint("Done.")
 			
 		js = json.dumps(excelData.getDataWithDict(), sort_keys = True, indent = 4, ensure_ascii=False)
 		outfile = codecs.open(excelData.jsonFileName, 'w', 'utf-8')
 		outfile.write(js)
 		outfile.close()
-		#print js
+		#ajPrint(js)
 
 if __name__ == "__main__" :
 	main()

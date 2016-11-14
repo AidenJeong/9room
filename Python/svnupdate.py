@@ -51,10 +51,12 @@ def svn_update(path) :
     return revNum
         
 def git_commit(path, msg) :
-    repo = git.Repo(path)
-    for addedPath in add_file_list :
-        repo.git.add(addedPath)
-    print(repo.git.commit(m=msg))
+    global add_file_list
+    if (len(add_file_list) > 0) :
+        repo = git.Repo(path)
+        for addedPath in add_file_list :
+            repo.git.add(addedPath)
+        print(repo.git.commit(m=msg))
    
 def main() :
     path = "."

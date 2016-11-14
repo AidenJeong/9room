@@ -23,6 +23,8 @@ def svn_update(path) :
     log_messages = client.log(path, revision_start=head, revision_end=end,limit=0)
     
     for log in log_messages :
+        if (log.revision.number == entry.revision.number) :
+            continue
         timestamp = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(log.date))
         logstr = '[%s]\t%s\t%s\n  %s\n' % (log.revision.number, timestamp, log.author, log.message)
         print(logstr)

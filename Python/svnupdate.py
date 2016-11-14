@@ -4,7 +4,7 @@ import pysvn
 import time
 import git
 
-add_file_list = []
+changed_file_list = []
 log_string = ''
 
 def svn_update(path) :
@@ -48,20 +48,22 @@ def svn_update(path) :
         if info.prop_changed :
             prop_changed = 'M'
         print(file_changed + prop_changed, path)
-        add_file_list.append(path)
-    print("changed " + str(len(add_file_list)) + " file(s).")
+        changed_file_list.append(path)
+    print("changed %d file(s)." % (len(changed_file_list)))
     return revNum
         
 def git_commit(path, msg) :
-    global add_file_list
-    if (len(add_file_list) > 0) :
+    global changed_file_list
+    if (len(changed_file_list) > 0) :
+        print("\nGit committing...")
         repo = git.Repo(path)
-        for addedPath in add_file_list :
+        for addedPath in changed_file_list :
             repo.git.add(addedPath)
         print(repo.git.commit(m=msg))
    
 def main() :
     path = "."
+    print("SVN update...")
     revNum = svn_update(path)
     l = 'revision: %s \n\n' % (revNum)
     global log_string
@@ -72,3 +74,4 @@ def main() :
         
 if __name__ == "__main__" :
     main()
+    

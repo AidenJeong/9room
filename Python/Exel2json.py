@@ -6,7 +6,7 @@ import sys
 
 # 읽어들일 엑셀 파일 리스트
 # 'ssWeaponAndProjectile.xlsx', 'ssCharacter.xlsx', 'ssEnemy.xlsx', 
-fileList = ['ssDataStage.xlsx']
+fileList = ['gamedata.xlsx']
 
 def ajPrint(*values) :
     str = ''
@@ -14,8 +14,8 @@ def ajPrint(*values) :
         str = str + v
     if sys.version_info >= (3, 0, 0) :
         print(str)
-    else
-        print str
+    else :
+        print (str) #3.0 이상 버전에서 오류남 ㅠㅠ
 
 class SheetData :
 	def __init__(self, sheetName):
